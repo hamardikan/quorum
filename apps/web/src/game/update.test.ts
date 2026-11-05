@@ -1125,7 +1125,7 @@ test('a Company comes back from a Sandbox as it was: its Inbox, history and undo
   expect(back.board.undo).toEqual(company.board.undo)
 })
 
-test('the Inbox opens on unread FYI Mail when nothing needs action, and on Needs action otherwise', () => {
+test('the Inbox opens on Needs action while something needs the player, and on FYI otherwise', () => {
   const letter: Mail = {
     id: 1,
     key: 'mentor:grow:0',
@@ -1148,6 +1148,8 @@ test('the Inbox opens on unread FYI Mail when nothing needs action, and on Needs
       Message.PanelOpened({ panel: 'inbox' }),
     ).model.board.inbox
   expect(opened([letter])).toMatchObject({ folder: 'fyi', focus: 1 })
-  expect(opened([{ ...letter, read: true }]).folder).toBe('action')
+  // Read letters still beat an empty "Nothing needs you." pane.
+  expect(opened([{ ...letter, read: true }])).toMatchObject({ folder: 'fyi', focus: 1 })
+  expect(opened([]).folder).toBe('action')
   expect(opened([letter, offer])).toMatchObject({ folder: 'action', focus: 2 })
 })

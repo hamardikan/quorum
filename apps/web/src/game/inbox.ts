@@ -113,10 +113,10 @@ export const closed = (inbox: Inbox, key: string, time: number, text: string): I
 export const folderList = (inbox: Inbox): ReadonlyArray<Mail> =>
   inbox.mail.filter((mail) => folderHolds(mail, inbox.folder)).reverse()
 
-/** The Inbox opens on Needs action, or on FYI when nothing needs action and FYI has unread Mail. */
+/** The Inbox opens on Needs action while something needs the player, and on FYI otherwise. */
 export const openingFolder = (inbox: Inbox): Folder =>
   !inbox.mail.some((mail) => folderHolds(mail, 'action')) &&
-  inbox.mail.some((mail) => !mail.read && folderHolds(mail, 'fyi'))
+  inbox.mail.some((mail) => folderHolds(mail, 'fyi'))
     ? 'fyi'
     : 'action'
 
